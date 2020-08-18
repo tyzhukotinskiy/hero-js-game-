@@ -1,0 +1,65 @@
+h1, h2, h3, h4, h5, h6, ul, p {
+	margin: 0;
+	padding: 0;
+}
+
+
+body {
+	background: #986712;
+}
+
+#hero div {
+	display: flex;
+}
+
+#hero div:first-child {
+	justify-content: center;
+}
+
+progress {
+    background: red;
+    border: 4px solid;
+    border-radius: 10px;
+    display: block;
+    height: 20px;
+    margin: 10px auto;
+    width: 300px;
+}
+
+
+progress::-webkit-progress-value {
+  background: rgba(10,110,220,0.8);
+}
+
+progress::-moz-progress-bar {
+  background: rgba(10,110,220,0.8);
+  border-radius: 5px;
+}
+
+
+#hero div p {
+	border: 2px solid rgba(0,0,0,0.4);
+	color: #fff;
+	padding: 20px;
+	text-align: center;
+	width: 50%;
+}
+
+#enemys {
+	border: 2px solid rgba(0,0,0,0.4);
+	padding: 20px;
+	width: 300px;
+}
+
+#enemys p, #rank p{
+	margin: 10px 0;
+}
+
+#enemys p:hover {
+	color: #2312ad;
+	cursor: pointer;
+}
+
+#enemys p:active {
+	color: #fa2312;
+}

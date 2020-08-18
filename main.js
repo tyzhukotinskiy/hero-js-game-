@@ -1,4 +1,9 @@
+///Сейчас нормально не отрабатывает переключение прогресс бара между уровнями 
+// нужно настроить это и проверить 
+
+
 let enemy = document.getElementsByClassName('enemy');
+let locationLand = "Sea";
 let oldLevel;
 
 
@@ -9,7 +14,7 @@ let levelArr = [0, 10, 100, 250, 500, 1000, 2500, 5000, 10000];
 
 //hero_name.textContent = prompt('Введите имя героя...');
 
-
+//получить текущего героя: конструктор игры (получаем либо создаем нового)
 function getCurrentHero(name) {
 	let heroes = localStorage.getItem('heroes');
 
@@ -36,12 +41,26 @@ function getCurrentHero(name) {
 	return {"name": name, "level": parseInt(getHeroInfoData(name, 'levels')), "exp": parseInt(getHeroInfoData(name, 'exp'))};
 }
 
+//получить иноформацию о герое по ключу
 function getHeroInfoData(heroName, keyName) {
 	let dataSetInfo = localStorage.getItem(keyName).split(',');
 	for (let i = 0; i < dataSetInfo.length; i++) {
 		let dataSetInfoItem = dataSetInfo[i].split('=');
 		if(dataSetInfoItem[0] == heroName) return dataSetInfoItem[1];
 	}
+}
+
+//получить разницу в опытах героя для отображения прогресс бара
+function getHeroDifferenceExpForProgress(hero) {
+	let exp = hero.exp;
+	let minMaxArr = [];
+	for (let i = 0; i < levelArr.length; i++) {
+		if (exp >= levelArr[i]) {
+			minMaxArr[0] = levelArr[i];
+			minMaxArr[1] = levelArr[i+1];
+		}
+	}
+	return minMaxArr;
 }
 
 function getAllHeroes() {
@@ -54,7 +73,13 @@ function getAllHeroesWithData(key = null) {
 }
 
 function setProgressExpValue(exp) {
-	level.value = exp;
+	level.value = level.value + exp;
+}
+
+function setProgressSizeMinMax(hero) {
+	let minMaxArr = getHeroDifferenceExpForProgress(hero);
+	level.max = minMaxArr[1]-minMaxArr[0];
+	level.value = hero.exp - minMaxArr[0];
 }
 
 function setTextLevelValue(level) {
@@ -79,7 +104,6 @@ function setTextRankValue() {
 	let heroes = getAllHeroesWithData('exp');
 	let heroesArr = [];
 	let hero_rank = document.getElementsByClassName('hero_rank');
-	//console.log(heroes);
 
 	for (let i = 0; i < heroes.length; i++) {
 		let item = heroes[i].split('=');
@@ -90,11 +114,24 @@ function setTextRankValue() {
 		return b.exp - a.exp;
 	});
 
-	for (let i = 0; i < hero_rank.length; i++) {
+	let countRank = hero_rank.length;
+	if (heroesArr.length < countRank) countRank = heroesArr.length;
+
+	for (let i = 0; i < countRank; i++) {
 		hero_rank[i].textContent = heroesArr[i].name + ' - ' + heroesArr[i].exp + ' опыта;';
 	}
+}
 
-	console.log(heroesArr);
+function setTextEnemysValue(locationName) {
+	let locationEnemys = getEnemys(locationName);
+	let valuesArr = locationEnemys.split('=')[1].split('.');
+	
+	let enemy = document.getElementsByClassName('enemy');
+
+	for(let i = 0; i < enemy.length; i++) {
+		enemy[i].innerText += valuesArr[i];
+		enemy[i].dataset.id = valuesArr[i];
+	}
 }
 
 function setExp(value, hero) {
@@ -111,7 +148,9 @@ function checkNewLevel(level) {
 	if (level != oldLevel) {
 		oldLevel = level;
 		alert("Поздравляем! Достигнут новый уровень");
+		return true;
 	}
+	return false;
 }
 
 function saveHero(hero) {
@@ -136,8 +175,65 @@ function saveHero(hero) {
 	localStorage.setItem('exp', eStr);
 }
 
+function getEnemys (locationName = null) {
+	let enemys = localStorage.getItem('enemys');
 
+	if (enemys === null) return 'Local=1.2.3.4';
+	if (locationName === null) return enemys;
 
+	let enemysArr = enemys.split(',');
+
+	for (let i = 0; i < enemysArr.length; i++) {
+		if (enemysArr[i].split('=')[0] == locationName) {
+			return enemysArr[i];
+		} 
+	}
+}
+
+function setEnemys (locationName) {
+	let storeEnemy = getEnemys();
+
+	let currentLocation = 'Local';
+
+	console.log(storeEnemy);
+
+	let enemysArr = storeEnemy.split(',');
+	console.log(enemysArr);
+	let currentLocationIndex = 0;
+
+	for (let i = 0; i < enemysArr.length; i++) {
+		if (enemysArr[i].split('=')[0] == currentLocation) {
+			currentLocationIndex = i;	
+			break;
+		} 
+	}
+
+	console.log(enemysArr[currentLocationIndex]);
+
+	//if (storeEnemy.join(',') == '1,2,3,4') alert(1);
+
+	let enemy = document.getElementsByClassName('enemy');
+	let enemyId = [];
+	let enemyStr = locationName + '=';
+
+	for (var i = 0; i < enemy.length; i++) {
+		enemyId.push(enemy[i].dataset.id);
+		if (i == enemy.length - 1) enemyStr += enemy[i].dataset.id;
+		else enemyStr += enemy[i].dataset.id + '.';
+	}
+
+	enemysArr[currentLocationIndex] = enemyStr;
+
+	localStorage.setItem('enemys', enemysArr.join(','));
+}
+
+function addLocation(locationName) {
+	let enemys = getEnemys();
+	enemys += ',' + locationName + '=1.2.3.4';
+	localStorage.setItem('enemys', enemys);
+}
+
+///входная точка игры
 let hero_name_prompt = prompt("Введите имя героя...");
 let heroInfo;
 if (hero_name.length == 0 || hero_name === null) location.reload();
@@ -152,19 +248,11 @@ else {
 	oldLevel = heroInfo.level;
 	console.log(heroInfo);
 	setProgressExpValue(heroInfo.exp);
+	setProgressSizeMinMax(heroInfo);
+	//setEnemys('Local');
+	//addLocation('Local');
+	setTextEnemysValue(locationLand);
 }
-//localStorage.clear();
-//let hero = getCurrentHero(hero_name);
-
-
-
-
-
-
-
-
-
-
 
 let t = setInterval(function () {
 for (let i = 0; i < enemy.length; i++) {
@@ -172,27 +260,32 @@ for (let i = 0; i < enemy.length; i++) {
 		//level.value += (e.target.dataset.id * 3);
 
 		let enemyArr = document.getElementsByClassName('enemy');
-		let o = enemyArr[enemyArr.length - 1];
-		let lastEnemyId = ++o.dataset.id;
+		let lastEnemy = enemyArr[enemyArr.length - 1];
+		let lastEnemyId = parseInt(lastEnemy.dataset.id)+1;
 		
+		enemys.removeChild(e.target);
+
 		p = document.createElement("p");
 		p.textContent = "Враг №"+lastEnemyId;
 		p.className = "enemy";
 		p.dataset.id = lastEnemyId;
 		enemys.appendChild(p);
 
-		enemys.removeChild(e.target);
-
 		setExp(5, heroInfo);
-		setProgressExpValue(parseInt(heroInfo.exp));
+		setProgressExpValue(5);
 		setTextExpValue(heroInfo.exp);
 		setTextLevelValue(heroInfo.level);
 		setTextToLevelValue(heroInfo.exp, heroInfo.level);
-		checkNewLevel(heroInfo.level);
+		if (checkNewLevel(heroInfo.level)) {
+			console.log('newLevel');
+			setProgressSizeMinMax(heroInfo);
+		}
 		console.log(heroInfo);
 
 
 		saveHero(heroInfo);
+
+		setEnemys(locationLand);
 
 		setTextRankValue();
 	}
