@@ -8,6 +8,15 @@ body {
 	background: #986712;
 }
 
+.d-flex {
+	align-items: center;
+	display: flex;
+}
+
+.fas {
+	padding: 0 10px;
+}
+
 #hero div {
 	display: flex;
 }
@@ -55,11 +64,22 @@ progress::-moz-progress-bar {
 	margin: 10px 0;
 }
 
-#enemys p:hover {
-	color: #2312ad;
+#enemys p:active {
+	color: #fa2312;
+}
+
+.enemy_info {
 	cursor: pointer;
 }
 
-#enemys p:active {
-	color: #fa2312;
+.enemy_info:hover {
+	color: yellow;
+}
+
+.enemy_fight {
+	cursor: pointer;
+}
+
+.enemy_fight:hover {
+	color: red;
 }

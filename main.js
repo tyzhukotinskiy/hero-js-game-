@@ -1,9 +1,6 @@
-///Сейчас нормально не отрабатывает переключение прогресс бара между уровнями 
-// нужно настроить это и проверить 
-
-
 let enemy = document.getElementsByClassName('enemy');
-let locationLand = "Sea";
+let enemy_fight = document.getElementsByClassName('enemy_fight');
+let locationLand = prompt("На какую локацию хотите отправиться? " + getLocations());
 let oldLevel;
 
 
@@ -11,8 +8,27 @@ let oldLevel;
 
 let levelArr = [0, 10, 100, 250, 500, 1000, 2500, 5000, 10000];
 
+function getLocations() {
+	let enemysLocation = getEnemys().split(',');
+	let locations = "";
 
-//hero_name.textContent = prompt('Введите имя героя...');
+	for(let i = 0; i < enemysLocation.length; i++) {
+		if (i == enemysLocation.length - 1) locations += enemysLocation[i].split('=')[0] + '.';
+		else locations += enemysLocation[i].split('=')[0] + ', ';
+	}
+
+	return locations;
+}
+
+function checkLocation(locationName) {
+	let enemysLocation = getEnemys().split(',');
+
+	for(let i = 0; i < enemysLocation.length; i++) {
+		if(enemysLocation[i].split('=')[0] == locationName) return true;
+	}
+
+	return false;
+}
 
 //получить текущего героя: конструктор игры (получаем либо создаем нового)
 function getCurrentHero(name) {
@@ -22,6 +38,7 @@ function getCurrentHero(name) {
 		localStorage.setItem('heroes', name);
 		localStorage.setItem('levels', name+'=0');
 		localStorage.setItem('exp', name+'=0');
+		localStorage.setItem('army', name+'=10000');
 	}
 	else {
 		heroesArr = heroes.split(',');
@@ -32,13 +49,15 @@ function getCurrentHero(name) {
 		if (newHero){
 			let levels = localStorage.getItem('levels');
 			let exp = localStorage.getItem('exp');
+			let army = localStorage.getItem('army');
 			localStorage.setItem('heroes', heroes + ',' + name);
 			localStorage.setItem('levels', levels + ',' + name+'=0');
 			localStorage.setItem('exp', exp + ',' + name+'=0');
+			localStorage.setItem('army', army + ',' + name+'=10000');
 		}
 	}
 
-	return {"name": name, "level": parseInt(getHeroInfoData(name, 'levels')), "exp": parseInt(getHeroInfoData(name, 'exp'))};
+	return {"name": name, "level": parseInt(getHeroInfoData(name, 'levels')), "exp": parseInt(getHeroInfoData(name, 'exp')), "army": parseInt(getHeroInfoData(name, 'army'))};
 }
 
 //получить иноформацию о герое по ключу
@@ -81,7 +100,9 @@ function setProgressSizeMinMax(hero) {
 	level.max = minMaxArr[1]-minMaxArr[0];
 	level.value = hero.exp - minMaxArr[0];
 }
-
+ 
+//в setTextLevelValue setTextExpValue setTextArmyValue не объявленные переменные означают 
+//DOM элементы, где название переменной соответствует id атрибуту у тега html
 function setTextLevelValue(level) {
 	let heroLevelArr = hero_level.textContent.split('№');
 	heroLevelArr[1] = level;
@@ -92,6 +113,12 @@ function setTextExpValue(exp) {
 	let heroExpArr = hero_exp.textContent.split(' ');
 	heroExpArr[1] = exp;
 	hero_exp.textContent = heroExpArr.join(' ');
+}
+
+function setTextArmyValue(army) {
+	let heroExpArr = hero_army.textContent.split(' ');
+	heroExpArr[1] = army;
+	hero_army.textContent = heroExpArr.join(' ');
 }
 
 function setTextToLevelValue(exp, level) {
@@ -129,8 +156,9 @@ function setTextEnemysValue(locationName) {
 	let enemy = document.getElementsByClassName('enemy');
 
 	for(let i = 0; i < enemy.length; i++) {
-		enemy[i].innerText += valuesArr[i];
-		enemy[i].dataset.id = valuesArr[i];
+		enemy[i].innerText += valuesArr[i].split(':')[0];
+		enemy[i].dataset.id = valuesArr[i].split(':')[0];
+		enemy[i].dataset.army = valuesArr[i].split(':')[1];
 	}
 }
 
@@ -178,7 +206,7 @@ function saveHero(hero) {
 function getEnemys (locationName = null) {
 	let enemys = localStorage.getItem('enemys');
 
-	if (enemys === null) return 'Local=1.2.3.4';
+	if (enemys === null) return 'Local=1:2.2:4.3:6.4:8';
 	if (locationName === null) return enemys;
 
 	let enemysArr = enemys.split(',');
@@ -190,27 +218,27 @@ function getEnemys (locationName = null) {
 	}
 }
 
-function setEnemys (locationName) {
-	let storeEnemy = getEnemys();
 
-	let currentLocation = 'Local';
+function getLocationEnemyIndex(enemysArr, locationName) {
+	let currentLocation = locationLand;
 
-	console.log(storeEnemy);
-
-	let enemysArr = storeEnemy.split(',');
 	console.log(enemysArr);
-	let currentLocationIndex = 0;
 
-	for (let i = 0; i < enemysArr.length; i++) {
+	for (let i = 0; i < enemysArr.length; i++)
 		if (enemysArr[i].split('=')[0] == currentLocation) {
-			currentLocationIndex = i;	
-			break;
+			console.log(enemysArr[i]);
+			return i;
 		} 
-	}
+}
 
-	console.log(enemysArr[currentLocationIndex]);
+////1 - сначала получаем врагов по имени локации на которой находимся
+////2 - делим полученную строку из локалСторэдж на массив по локациям
+////3 - зная имя настоящей локации, получаем ее индекс и далее работаем с ее врагами  
+////4 - обновленную строку записываем в локалСторэдж и закидываем в браузер  
+function setEnemys (locationName) {
+	let enemysArr = getEnemys().split(',');
 
-	//if (storeEnemy.join(',') == '1,2,3,4') alert(1);
+	currentLocationIndex = getLocationEnemyIndex(enemysArr, locationName);
 
 	let enemy = document.getElementsByClassName('enemy');
 	let enemyId = [];
@@ -218,30 +246,78 @@ function setEnemys (locationName) {
 
 	for (var i = 0; i < enemy.length; i++) {
 		enemyId.push(enemy[i].dataset.id);
-		if (i == enemy.length - 1) enemyStr += enemy[i].dataset.id;
-		else enemyStr += enemy[i].dataset.id + '.';
+		if (i == enemy.length - 1) enemyStr += enemy[i].dataset.id+':'+enemy[i].dataset.army;
+		else enemyStr += enemy[i].dataset.id +':'+enemy[i].dataset.army + '.';
 	}
 
 	enemysArr[currentLocationIndex] = enemyStr;
+	console.log('arr');
+	console.log(enemysArr);
+
+	localStorage.setItem('enemys', enemysArr.join(','));
+}
+
+//еще не успел войти в коммит а стал рудиментом(
+//надеюсь этой функции еще будет применение
+function setEnemyArmy(locationName) {
+	let enemysArr = getEnemys().split(',');
+
+	currentLocationIndex = getLocationEnemyIndex(enemysArr, locationName);
+
+	console.log(enemysArr[currentLocationIndex]);
+	console.log(1234567);
+
+	let enemy = document.getElementsByClassName('enemy');
+
+	let enemysArrValue = enemysArr[currentLocationIndex].split('=')[1].split('.');
+
+	console.log('толпы врагов!');
+	console.log(enemysArrValue);
+	
+	for(let i = 0; i < enemysArrValue.length; i++) {
+		console.log(enemysArrValue[i]);
+		if (enemysArrValue[i].indexOf(':') == -1){
+			enemysArrValue[i] += ':'+ parseInt(Math.random() * (12 - 2) + 2);
+		}
+		console.log(enemysArrValue[i]);
+		console.log('---------');
+	}
+
+	let str = locationName + '=' + enemysArrValue.join('.');
+
+	enemysArr[currentLocationIndex] = str;
 
 	localStorage.setItem('enemys', enemysArr.join(','));
 }
 
 function addLocation(locationName) {
 	let enemys = getEnemys();
-	enemys += ',' + locationName + '=1.2.3.4';
+	enemys += ',' + locationName + '=1:1.2:4.3:9.4:16';
 	localStorage.setItem('enemys', enemys);
+}
+
+function showEnemyInfo() {
+	let enemyInfo = document.getElementsByClassName('enemy_info');
+
+	for(let i = 0; i < enemyInfo.length; i++) {
+		enemyInfo[i].onclick = function (e) {
+			let enemyItem = e.target.parentElement.children[0];
+			alert('Враг №'+enemyItem.dataset.id + '; Имеет армию: ' + enemyItem.dataset.army);
+		}
+	}
 }
 
 ///входная точка игры
 let hero_name_prompt = prompt("Введите имя героя...");
 let heroInfo;
 if (hero_name.length == 0 || hero_name === null) location.reload();
+else if (!checkLocation(locationLand)) location.reload();
 else {
 	heroInfo = getCurrentHero(hero_name_prompt);
 	hero_name.textContent = heroInfo.name;
 	hero_level.textContent += heroInfo.level;
 	setTextExpValue(heroInfo.exp);
+	setTextArmyValue(heroInfo.army);
 	setTextLevelValue(heroInfo.level);
 	setTextToLevelValue(heroInfo.exp, heroInfo.level);
 	setTextRankValue();
@@ -250,30 +326,50 @@ else {
 	setProgressExpValue(heroInfo.exp);
 	setProgressSizeMinMax(heroInfo);
 	//setEnemys('Local');
-	//addLocation('Local');
+	//addLocation('Sky');
 	setTextEnemysValue(locationLand);
+	showEnemyInfo();
 }
 
 let t = setInterval(function () {
 for (let i = 0; i < enemy.length; i++) {
-	enemy[i].onclick = function (e) {
+	enemy_fight[i].onclick = function (e) {
 		//level.value += (e.target.dataset.id * 3);
 
 		let enemyArr = document.getElementsByClassName('enemy');
 		let lastEnemy = enemyArr[enemyArr.length - 1];
 		let lastEnemyId = parseInt(lastEnemy.dataset.id)+1;
 		
-		enemys.removeChild(e.target);
+		console.log(e);
+		console.log(e.target.parentElement);
 
+		enemys.removeChild(e.target.parentElement);
+
+
+		divEnemy = document.createElement("div");
+		divEnemy.className = 'd-flex';
 		p = document.createElement("p");
-		p.textContent = "Враг №"+lastEnemyId;
+		i = document.createElement("i");
+		iSwords = document.createElement("i");
+		i.className = 'fas fa-info enemy_info';
+		iSwords.className = 'far fa-swords enemy_fight';
+		p.innerText = 'Враг №'+lastEnemyId;
 		p.className = "enemy";
 		p.dataset.id = lastEnemyId;
-		enemys.appendChild(p);
+		p.dataset.army = parseInt(Math.random() * (12 - 2) + 2);
+
+		divEnemy.appendChild(p);
+		divEnemy.appendChild(i);
+		divEnemy.appendChild(iSwords);
+
+		console.log(divEnemy);
+
+		enemys.appendChild(divEnemy);
 
 		setExp(5, heroInfo);
 		setProgressExpValue(5);
 		setTextExpValue(heroInfo.exp);
+		setTextArmyValue(heroInfo.army);
 		setTextLevelValue(heroInfo.level);
 		setTextToLevelValue(heroInfo.exp, heroInfo.level);
 		if (checkNewLevel(heroInfo.level)) {
@@ -282,10 +378,14 @@ for (let i = 0; i < enemy.length; i++) {
 		}
 		console.log(heroInfo);
 
-
 		saveHero(heroInfo);
 
 		setEnemys(locationLand);
+
+		showEnemyInfo();
+
+		//console.log('Armu');
+		//setEnemyArmy(locationLand);
 
 		setTextRankValue();
 	}
