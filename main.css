@@ -5,12 +5,20 @@ h1, h2, h3, h4, h5, h6, ul, p {
 
 
 body {
-	background: #986712;
+	background: #d8a933;
 }
 
 .d-flex {
 	align-items: center;
 	display: flex;
+}
+
+.top_icon {
+	background: #111;
+	border-radius: 5px;
+	display: inline-block;
+	font-size: 20px;
+	padding: 4px;
 }
 
 .fas {
@@ -82,4 +90,36 @@ progress::-moz-progress-bar {
 
 .enemy_fight:hover {
 	color: red;
+}
+
+#buy_army {
+	color: lightgoldenrodyellow;
+	cursor: pointer;
+	font-size: 22px;
+}
+
+#buy_army:hover {
+	color: red;
+}
+
+#modal {
+	align-items: center;
+	background: rgba(0, 0, 0, 0.7);
+	display: none;
+	justify-content: center;
+	left: 0;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	width: 100vw;
+}
+
+#modal_body {
+	align-items: center;
+	background: #eee;
+	border: 3px solid #111111;
+	border-radius: 15px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }

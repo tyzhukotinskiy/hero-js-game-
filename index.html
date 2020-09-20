@@ -10,13 +10,27 @@
 
 	<div id="hero">
 	  	<div>
-	  		<p id="hero_name">Имя героя</p>
+	  		<p>
+				<i class="far top_icon fa-user-crown"></i>
+				<span id="hero_name">Имя героя</span>
+			</p>
 	  	</div>
 	  	<div>
-		  	<p id="hero_level">Уровень №</p>
-		  	<p id="hero_army">Армия: </p>
-		  	<p id="hero_exp">Опыт: </p>
+			<p><i class="far top_icon fa-arrow-alt-up"></i> <span id="hero_level">Уровень №</span></p>
+		  	<p><i class="far top_icon fa-mace"></i> <span id="hero_army">Армия: </span></p>
+		  	<p><i class="far top_icon fa-brain"></i> <span id="hero_exp">Опыт: </span></p>
+		  	<p><i class="far top_icon fa-coins"></i> <span id="hero_money">Золото: </span></p>
 		</div>
+	</div>
+
+	<div id="location">
+		<p>
+			<i class="fal fa-crown"></i>
+			<span id="location_name">
+
+			</span>
+		</p>
+		<select id="location_option"></select>
 	</div>
 
 	 <progress max="1000" value="0" id="level">
@@ -49,6 +63,10 @@
 	  	</div>
 	  </div>
 
+	<div id="shop">
+		<p id="buy_army">Купить армию!</p>
+	</div>
+
 	  <hr>
 
 	  <h3>Рейтинг героев</h3>
@@ -60,8 +78,14 @@
 	  	<p class="hero_rank"></p>
 	  </div>
 
-	  <script src="main.js">
-	  	
-	  </script>
+	<div id="modal">
+		<div id="modal_body">
+			<p id="modal_message"></p>
+			<button id="modal_close">Got it!</button>
+		</div>
+	</div>
+
+	<script src="modal.js"></script>
+	<script src="main.js"></script>
 </body>
 </html>
