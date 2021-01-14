@@ -8,7 +8,7 @@ h1, h2, h3, h4, h5, h6, ul, p {
 }
 
 body {
-	background: #d8a933;
+	background: #88b953;
 }
 
 .d-flex {
@@ -76,9 +76,15 @@ progress::-moz-progress-bar {
 
 #castle p#take_money {
 	color: #e8f943;
+	cursor: pointer;
 	font-size: 22px;
 	text-decoration: underline;
 	text-transform: uppercase;
+}
+
+#castle p#take_money:hover {
+	background: rgba(209, 39, 120, 0.1);
+	color: gold;
 }
 
 #enemys {

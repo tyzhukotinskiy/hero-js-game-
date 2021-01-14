@@ -41,6 +41,7 @@ function getCurrentHero(name) {
 		localStorage.setItem('exp', name+'=0');
 		localStorage.setItem('money', name+'=10000');
 		localStorage.setItem('army', name+'=10000');
+		localStorage.setItem('lastTakingMoney', name+'='+(new Date().getTime()));
 	}
 	else {
 		heroesArr = heroes.split(',');
@@ -53,15 +54,24 @@ function getCurrentHero(name) {
 			let exp = localStorage.getItem('exp');
 			let money = localStorage.getItem('money');
 			let army = localStorage.getItem('army');
+			let lastTakingMoney = localStorage.getItem('lastTakingMoney');
 			localStorage.setItem('heroes', heroes + ',' + name);
 			localStorage.setItem('levels', levels + ',' + name+'=0');
 			localStorage.setItem('exp', exp + ',' + name+'=0');
 			localStorage.setItem('army', army + ',' + name+'=10000');
 			localStorage.setItem('money', money + ',' + name+'=10000');
+			localStorage.setItem('lastTakingMoney', lastTakingMoney + ',' + name+'='+(new Date().getTime()));
 		}
 	}
 
-	return {"name": name, "level": parseInt(getHeroInfoData(name, 'levels')), "exp": parseInt(getHeroInfoData(name, 'exp')), "army": parseInt(getHeroInfoData(name, 'army')), "money": parseInt(getHeroInfoData(name, 'money')),};
+	return {
+		"name": name,
+		"level": parseInt(getHeroInfoData(name, 'levels')),
+		"exp": parseInt(getHeroInfoData(name, 'exp')),
+		"army": parseInt(getHeroInfoData(name, 'army')),
+		"money": parseInt(getHeroInfoData(name, 'money')),
+		"lastTakingMoney": parseInt(getHeroInfoData(name, 'lastTakingMoney')),
+	};
 }
 
 //получить иноформацию о герое по ключу
@@ -196,6 +206,11 @@ function setMoney(value, hero) {
 	console.log(hero);
 }
 
+//возвращаем количество минут прошедших с последнего сбора золота в замке
+function getTimeDifferenceForMoney(name) {
+	return (Date.now() - parseInt(getHeroInfoData(name, 'lastTakingMoney')))/1000/60/60*60;
+}
+
 function checkNewLevel(level) {
 	if (level != oldLevel) {
 		oldLevel = level;
@@ -247,6 +262,16 @@ function saveHero(hero) {
 	}
 	let mStr = money.join(',');
 	localStorage.setItem('money', mStr);
+
+	let lastTakingMoney = localStorage.getItem('lastTakingMoney').split(',');
+	for (var i = 0; i < lastTakingMoney.length; i++) {
+		if (hero.name == lastTakingMoney[i].split('=')[0]) {
+			lastTakingMoney[i] = hero.name+'='+hero.lastTakingMoney;
+			break;
+		}
+	}
+	let ltmStr = lastTakingMoney.join(',');
+	localStorage.setItem('lastTakingMoney', ltmStr);
 }
 
 function getEnemys (locationName = null) {
@@ -438,6 +463,17 @@ else {
 		heroInfo.army = 10000;
 		saveHero(heroInfo);
 		setTextArmyValue(heroInfo.army);
+		setTextMoneyValue(heroInfo.money);
+	}
+
+	take_money.onclick = function () {
+		console.log("Собрали золото: " + heroInfo.money);
+		//получим разницу во времени с метки локалСторэджа и настоящего времени
+		console.log(getTimeDifferenceForMoney(heroInfo.name));
+		let minutes = getTimeDifferenceForMoney(heroInfo.name);
+		heroInfo.money += Math.floor(minutes*1.5);
+		heroInfo.lastTakingMoney = Date.now();
+		saveHero(heroInfo);
 		setTextMoneyValue(heroInfo.money);
 	}
 
