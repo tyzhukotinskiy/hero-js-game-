@@ -66,10 +66,14 @@ function getCurrentHero(name) {
 
 //получить иноформацию о герое по ключу
 function getHeroInfoData(heroName, keyName) {
+	console.log(keyName);
 	let dataSetInfo = localStorage.getItem(keyName).split(',');
 	for (let i = 0; i < dataSetInfo.length; i++) {
 		let dataSetInfoItem = dataSetInfo[i].split('=');
-		if(dataSetInfoItem[0] == heroName) return dataSetInfoItem[1];
+		if(dataSetInfoItem[0] == heroName){
+			console.log(dataSetInfoItem[1]);
+			return dataSetInfoItem[1];
+		}
 	}
 }
 
@@ -233,6 +237,16 @@ function saveHero(hero) {
 	}
 	let aStr = army.join(',');
 	localStorage.setItem('army', aStr);
+
+	let money = localStorage.getItem('money').split(',');
+	for (var i = 0; i < money.length; i++) {
+		if (hero.name == money[i].split('=')[0]) {
+			money[i] = hero.name+'='+hero.money;
+			break;
+		}
+	}
+	let mStr = money.join(',');
+	localStorage.setItem('money', mStr);
 }
 
 function getEnemys (locationName = null) {
@@ -418,9 +432,13 @@ else {
 	}
 
 	buy_army.onclick = function () {
+		let difference = 10000 - heroInfo.army;
+		heroInfo.money -= difference;
+		console.log("Купили армию: " + heroInfo.money);
 		heroInfo.army = 10000;
 		saveHero(heroInfo);
 		setTextArmyValue(heroInfo.army);
+		setTextMoneyValue(heroInfo.money);
 	}
 
 	setTextExpValue(heroInfo.exp);

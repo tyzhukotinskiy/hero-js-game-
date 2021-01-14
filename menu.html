@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<style>
+		li.active {
+			color: red;
+		}
+	</style>
+	<ul id="ul">
+		<li>Punkt 1</li>
+		<li>Punkt 2</li>
+		<li>Punkt 3</li>
+		<li>Punkt 4</li>
+	</ul>
+	<script>
+		function clearLi() {
+			for(let i = 0; i < li.length; i++) {
+				li[i].className = '';
+			}
+		}
+
+
+		let li = document.getElementsByTagName('li');
+		let count = 0;
+		let t = setInterval(function(){
+			clearLi();
+			li[count].className = 'active';
+			if(count == li.length-1) count = 0;
+			else count++;
+		}, 100);
+	</script>
+</body>
+</html>

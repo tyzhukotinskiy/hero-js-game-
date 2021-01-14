@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    var arr = [[3, 4, 5, 6], [3, 2, 4, 5], [1, 1, 19, 5], [2, 2, 4, 5]];
+
+  for(var i = 0; i < arr.length; i++) {
+    document.write(arr[i] + "<br />");
+  }
+
+  document.write("<br />")
+
+  var arr_2 = [];
+
+  for(var i = 0; i < arr.length; i++) {
+    var k = i;
+    arr_2.push(arr[i][k]);
+  }
+
+  document.write(arr_2 + "<br />" + "<br />");
+
+  for (var i = 0; i < arr_2.length; i++) {
+    for(var j = 0; j < arr_2.length - 1; j++) {
+      if (arr_2[j] > arr_2[j + 1]) {
+        var temp = arr_2[j];
+        arr_2[j] = arr_2[j + 1];
+        arr_2[j + 1] = temp;
+      }
+    }
+  }
+
+  document.write(arr_2 + "<br />" + "<br />");
+
+  var ar = [];
+
+  for(var i = 0; i < arr.length; i++) {
+    var k = i;
+    ar.push(arr[i]);
+  }
+
+  console.log(ar);
+
+  document.write(ar + "<br /> <br />");
+
+  var n = 4;
+  var m = 4;
+  var a = [];
+  var arrr = [];
+
+
+  console.log(ar);
+  for(var i = 0; i < n; i++) {
+      var k = i;
+      a.push(ar[i]);
+      document.write(a[i] + "<br />");
+  }
+
+  console.log(a);
+
+  for(var j = 0; j < m; j++) {
+    var k = 0;
+      console.log(a[j][k] + " > " + a[j][k + 1] + " = " + (a[j][k] > a[j][k + 1]));
+      if(a[j][k] > a[j][k + 1]) {
+        //alert(true);
+      } else {
+        //alert(false);
+      }
+    }
+
+
+console.log(a);
+  </script>
+</body>
+</html>

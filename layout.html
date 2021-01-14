@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div class="div">
+			<div class="container">
+				<ul>
+					<li><a href="">Home</a></li>
+					<li><a href="">About</a></li>
+					<li><a href="">More si</a></li>
+					<li><a href="">Contact</a></li>
+					<li><a href="">Sing in / sing up</a></li>
+				</ul>
+			</div>
+		</div>	
+		<style>
+			.container {
+				margin: 0 auto;
+				text-align: center;
+				width: 90%;
+			}
+
+			ul {
+				width: 100%;
+			}
+
+			ul li {
+				display: inline-block;
+				text-align: center;
+				width: 19%;
+			}
+
+			ul li a {
+				background: red;
+				color: #fff;
+				display: block;
+				font-size: 24px;
+				padding: 15px 30px;
+				text-decoration: none;
+				transition: 1.3s;
+			}
+
+			ul li a:hover {
+				background: #f686ff;
+				color: blue;
+				transition: 1.3s;
+			}
+
+			@media screen and (max-width: 900px) {
+				ul {
+					margin: 0;
+					padding: 0;
+				}
+				ul li {
+					display: block;
+					width: 100%;
+				}
+			}
+		</style>
+</body>
+</html>

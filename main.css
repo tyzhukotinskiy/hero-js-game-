@@ -3,6 +3,9 @@ h1, h2, h3, h4, h5, h6, ul, p {
 	padding: 0;
 }
 
+* {
+	font-family: Arial;
+}
 
 body {
 	background: #d8a933;
@@ -60,6 +63,22 @@ progress::-moz-progress-bar {
 	padding: 20px;
 	text-align: center;
 	width: 50%;
+}
+
+#castle	{
+	border: 2px solid rgba(0,0,0,0.4);
+	padding: 20px;
+}
+
+#castle h2 {
+	text-align: center;
+}
+
+#castle p#take_money {
+	color: #e8f943;
+	font-size: 22px;
+	text-decoration: underline;
+	text-transform: uppercase;
 }
 
 #enemys {

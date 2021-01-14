@@ -1,91 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-	<link rel="stylesheet" href="main.css">
-	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.11.1/css/all.css">
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.11.1/css/all.css">
 </head>
 <body>
 
-	<div id="hero">
-	  	<div>
-	  		<p>
-				<i class="far top_icon fa-user-crown"></i>
-				<span id="hero_name">Имя героя</span>
-			</p>
-	  	</div>
-	  	<div>
-			<p><i class="far top_icon fa-arrow-alt-up"></i> <span id="hero_level">Уровень №</span></p>
-		  	<p><i class="far top_icon fa-mace"></i> <span id="hero_army">Армия: </span></p>
-		  	<p><i class="far top_icon fa-brain"></i> <span id="hero_exp">Опыт: </span></p>
-		  	<p><i class="far top_icon fa-coins"></i> <span id="hero_money">Золото: </span></p>
-		</div>
-	</div>
+<div id="hero">
+    <div>
+        <p>
+            <i class="far top_icon fa-user-crown"></i>
+            <span id="hero_name">Имя героя</span>
+        </p>
+    </div>
+    <div>
+        <p><i class="far top_icon fa-arrow-alt-up"></i> <span id="hero_level">Уровень №</span></p>
+        <p><i class="far top_icon fa-mace"></i> <span id="hero_army">Армия: </span></p>
+        <p><i class="far top_icon fa-brain"></i> <span id="hero_exp">Опыт: </span></p>
+        <p><i class="far top_icon fa-coins"></i> <span id="hero_money">Золото: </span></p>
+    </div>
+</div>
 
-	<div id="location">
-		<p>
-			<i class="fal fa-crown"></i>
-			<span id="location_name">
+<div id="location">
+    <p>
+        <i class="fal fa-crown"></i>
+        <span id="location_name">
 
 			</span>
-		</p>
-		<select id="location_option"></select>
-	</div>
+    </p>
+    <select id="location_option"></select>
+</div>
 
-	 <progress max="1000" value="0" id="level">
-	    Загружено на <span id="value">25</span>%
-	  </progress>
-	  <p id="to_next_level">До следующего уровня осталось: </p>
+<progress max="1000" value="0" id="level">
+    Загружено на <span id="value">25</span>%
+</progress>
+<p id="to_next_level">До следующего уровня осталось: </p>
 
-	  
+<div id="castle">
+	<h2>Замок</h2>
 
-	  <div id="enemys">
-	  	<div class="d-flex">
-	  		<p class="enemy" data-id="1"> Враг №  </p>
-	  		<i class="fas fa-info enemy_info"></i>
-	  		<i class="far fa-swords enemy_fight"></i>
-	  	</div>
-	  	<div class="d-flex">
-	  		<p class="enemy" data-id="2"> Враг №  </p>
-	  		<i class="fas fa-info enemy_info"></i>
-	  		<i class="far fa-swords enemy_fight"></i>
-	  	</div>
-	  	<div class="d-flex">
-	  		<p class="enemy" data-id="3"> Враг №  </p>
-	  		<i class="fas fa-info enemy_info"></i>
-	  		<i class="far fa-swords enemy_fight"></i>
-	  	</div>
-	  	<div class="d-flex">
-	  		<p class="enemy" data-id="4"> Враг №  </p>
-	  		<i class="fas fa-info enemy_info"></i>
-	  		<i class="far fa-swords enemy_fight"></i>
-	  	</div>
-	  </div>
+	<p id="take_money">Собрать золото</p>
+	<p>
+		Устроить праздник(повышение золота на время)
+	</p>
+	<p>
+		Навестить прихожан(церковь)
+	</p>
+</div>
 
-	<div id="shop">
-		<p id="buy_army">Купить армию!</p>
-	</div>
+<div id="enemys">
+    <div class="d-flex">
+        <p class="enemy" data-id="1"> Враг № </p>
+        <i class="fas fa-info enemy_info"></i>
+        <i class="far fa-swords enemy_fight"></i>
+    </div>
+    <div class="d-flex">
+        <p class="enemy" data-id="2"> Враг № </p>
+        <i class="fas fa-info enemy_info"></i>
+        <i class="far fa-swords enemy_fight"></i>
+    </div>
+    <div class="d-flex">
+        <p class="enemy" data-id="3"> Враг № </p>
+        <i class="fas fa-info enemy_info"></i>
+        <i class="far fa-swords enemy_fight"></i>
+    </div>
+    <div class="d-flex">
+        <p class="enemy" data-id="4"> Враг № </p>
+        <i class="fas fa-info enemy_info"></i>
+        <i class="far fa-swords enemy_fight"></i>
+    </div>
+</div>
 
-	  <hr>
+<div id="shop">
+    <p id="buy_army">Купить армию!</p>
+</div>
 
-	  <h3>Рейтинг героев</h3>
-	  <div id="rank">
-	  	<p class="hero_rank"></p>
-	  	<p class="hero_rank"></p>
-	  	<p class="hero_rank"></p>
-	  	<p class="hero_rank"></p>
-	  	<p class="hero_rank"></p>
-	  </div>
+<hr>
 
-	<div id="modal">
-		<div id="modal_body">
-			<p id="modal_message"></p>
-			<button id="modal_close">Got it!</button>
-		</div>
-	</div>
+<h3>Рейтинг героев</h3>
+<div id="rank">
+    <p class="hero_rank"></p>
+    <p class="hero_rank"></p>
+    <p class="hero_rank"></p>
+    <p class="hero_rank"></p>
+    <p class="hero_rank"></p>
+</div>
 
-	<script src="modal.js"></script>
-	<script src="main.js"></script>
+<div id="modal">
+    <div id="modal_body">
+        <p id="modal_message"></p>
+        <button id="modal_close">Got it!</button>
+    </div>
+</div>
+
+<script src="modal.js"></script>
+<script src="main.js"></script>
 </body>
 </html>
